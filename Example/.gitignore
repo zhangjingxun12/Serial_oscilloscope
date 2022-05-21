@@ -64,3 +64,5 @@ node_modules/*
 .vscode/
 build/
 .vs/*
+.debug/*
+.release/*
