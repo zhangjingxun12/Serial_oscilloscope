@@ -4,14 +4,15 @@
 
 Echart::Echart(QWidget *parent) : QWidget(parent)
 {
-
+    
     int penwidth=2;
+    
     xyshow=new QLabel();
     x_move=0;
     move_flag=false;
 
     xGrid=0;
-    line  =new QLineSeries;
+    //line  =new QLineSeries;
     line0 =new QLineSeries();
     line1 =new QLineSeries();
     line2 =new QLineSeries();
@@ -31,9 +32,9 @@ Echart::Echart(QWidget *parent) : QWidget(parent)
     data_collect=QVector<QVector<QPointF>> {data0,data1,data2,data3,data4,data5,data6,data7,data8,data9,data10,data11,data12,data13,data14,data15};
     line_collect=QVector<QLineSeries *>    {line0,line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12,line13,line14,line15};
 
-    pen.setWidth(penwidth);
-    pen.setColor(QColor(255,0,0));
-    line->setPen(pen);
+    //pen.setWidth(penwidth);
+    //pen.setColor(QColor(255,0,0));
+    //line->setPen(pen);
     pen0.setWidth(penwidth);
     pen0.setColor(QColor(0,255,0));
     line0->setPen(pen0);
@@ -86,10 +87,10 @@ Echart::Echart(QWidget *parent) : QWidget(parent)
     mainwindow=new QHBoxLayout(this);
 
 
-    line->replace(dataa);
+    //line->replace(dataa);
     MyChart=new QChart();
 
-    MyChart->addSeries(line);
+    //MyChart->addSeries(line);
     for(int i=0;i<16;i++)
     {
         MyChart->addSeries(line_collect[i]);
@@ -99,6 +100,7 @@ Echart::Echart(QWidget *parent) : QWidget(parent)
     drawXGrid(0,1750);
     drawYGrid(-350,350);
     YEnd=350;
+    Ymin=-350;
     //MyChart->setBackgroundBrush(QBrush("black"));
 
 
@@ -131,18 +133,26 @@ void Echart::draw(int rank,int num,bool ischecked)
     {
         drawXGrid(XEnd-1750,XEnd);
     }
+    if (ischecked==false)
+    {
+        return;
+    }
+    if (Ymin == -350)
+    {
+        Ymin = num;
+    }
     if(ischecked)
     {
+        if (num < Ymin)
+        {
+            Ymin = num;
+        }
         if(num>YEnd)
-            drawYGrid(-num-10,num+10);
+            drawYGrid(Ymin,num+10);
         else if(num<-YEnd)
-            drawYGrid(num-10,-num+10);
+            drawYGrid(Ymin,-num+10);
         else
-            drawYGrid(-YEnd,YEnd);
-    }
-    else
-    {
-        drawYGrid(-YEnd,YEnd);
+            drawYGrid(Ymin,YEnd);
     }
 
     if(rank<=15)
@@ -194,7 +204,7 @@ void Echart::drawXGrid(int xStart,int xEnd)
     QValueAxis *axisx=new QValueAxis();
     axisx->setRange(xStart,xEnd);
     axisx->setGridLineVisible(true);
-    axisx->setTickCount(36);
+    axisx->setTickCount(11);
     axisx->setMinorTickCount(1);
     MyChart->setAxisX(axisx);
 }
@@ -206,7 +216,7 @@ void Echart::drawYGrid(int yStart,int yEnd)
     QValueAxis *axisy=new QValueAxis();
     axisy->setRange(yStart,yEnd);
     axisy->setGridLineVisible(true);
-    axisy->setTickCount(21);
+    axisy->setTickCount(11);
     axisy->setMinorTickCount(1);
     MyChart->setAxisY(axisy);
 }
@@ -239,9 +249,13 @@ void Echart::slotPointHoverd(const QPointF &point, bool state)
     {
         xyshow->setText(tr("(")+QString::asprintf("%1.0f",point.x())+tr(",")+QString::asprintf("%1.0f",point.y())+tr(")"));
         QPoint curPos = mapFromGlobal(QCursor::pos());
+        //  调整标签坐标
+        QPoint Echart_pos = mapFromGlobal(this->pos());
+        curPos -= Echart_pos;
         xyshow->move(curPos.x(), curPos.y()+80);
         xyshow->setWindowFlags(Qt::FramelessWindowHint);
         xyshow->show();
+        MyChart->setToolTip(xyshow->text());
     }
 //    else
 //        xyshow->hide();

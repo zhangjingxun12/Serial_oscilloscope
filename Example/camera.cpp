@@ -1,3 +1,7 @@
+﻿#if _MSC_VER >= 1600
+#pragma execution_character_set("utf-8")// 该指令仅支持VS环境
+#endif
+
 #include "camera.h"
 
 Camera::Camera(QWidget *parent) : QWidget(parent)
@@ -74,7 +78,7 @@ Camera::Camera(QWidget *parent) : QWidget(parent)
 
     mythread->start();
     time_break=new QTimer(this);
-    connect(time_break,&QTimer::timeout,this,&time_out);
+    connect(time_break,&QTimer::timeout,this,&Camera::time_out);
     time_break->start(1000);
     connect(mythread,SIGNAL(setsenddata(QByteArray)),this,SLOT(datashow(QByteArray)),Qt::QueuedConnection);
     connect(mythread,SIGNAL(setsenddata(QByteArray)),epoint,SLOT(toUpdate(QByteArray)),Qt::QueuedConnection);

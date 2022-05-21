@@ -51,7 +51,7 @@ private:
                      dataa;
     QPointF EarlyPoint;
     QPointF LaterPoint;
-    int xGrid,XStart,XEnd,YEnd;
+    int xGrid,XStart,XEnd,YEnd,Ymin;
     int x_move;
 
     QHBoxLayout *mainwindow;

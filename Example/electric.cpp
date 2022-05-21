@@ -83,7 +83,7 @@ void Electric::datashow(QByteArray data)
             portnum_collect[i]->setText(QString::number(data_show[i],10));
         }
 
-        echart->draw(100,0,1);
+        echart->draw(100,0,0);
         for(int i=0;i<16;i++)
             echart->draw(i,data_show[i],port_collect[i]->isChecked());
 

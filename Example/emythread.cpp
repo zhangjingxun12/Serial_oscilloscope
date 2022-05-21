@@ -1,3 +1,7 @@
+﻿#if _MSC_VER >= 1600
+#pragma execution_character_set("utf-8")// 该指令仅支持VS环境
+#endif
+
 #include "emythread.h"
 #include <QDebug>
 
@@ -190,14 +194,14 @@ void EMyThread::receivemessage()
     {
         showdata.append(MySerialPort->readAll());//有可能由于接受数据不完整而导致【】访问溢出，先判断数据大小，如果不符合直接舍弃
 
-        if(showdata[1]!=37||showdata[0]!=255)
+        if((uint8_t)showdata[1]!=37|| (uint8_t)showdata[0]!=255)
         {
             showdata.clear();
         }
 
         if(showdata.size()==36)
         {
-            if((showdata[0]==255)&&(showdata[1]==37)&&(showdata[34]==37)&&(showdata[35]==255))
+            if(((uint8_t)showdata[0]==255)&&((uint8_t)showdata[1]==37)&&((uint8_t)showdata[34]==37)&&((uint8_t)showdata[35]==255))
             {
                 image_count++;
                 Showbuf->append("接受第"+QString::number(image_count,10)+"组数据");
@@ -213,7 +217,7 @@ void EMyThread::receivemessage()
     else if(pattern_select==2)
     {
         showdata.append(MySerialPort->readAll());//有可能由于接受数据不完整而导致【】访问溢出，先判断数据大小，如果不符合直接舍弃
-        if(showdata[1]!=37||showdata[0]!=255)
+        if((uint8_t)showdata[1]!=37|| (uint8_t)showdata[0]!=255)
         {
             showdata.clear();
         }
@@ -222,7 +226,7 @@ void EMyThread::receivemessage()
         {
             if(showdata.size()==showdata[2]*showdata[3]*100+38)
             {
-                if((showdata[0]==255)&&(showdata[1]==37)&&(showdata[showdata[2]*showdata[3]*100+36]==37)&&(showdata[showdata[2]*showdata[3]*100+37]==255))
+                if(((uint8_t)showdata[0]==255)&&((uint8_t)showdata[1]==37)&&((uint8_t)showdata[showdata[2]*showdata[3]*100+36]==37)&&((uint8_t)showdata[showdata[2]*showdata[3]*100+37]==255))
                 {
                     image_count++;
                     Showbuf->append("接受第"+QString::number(image_count,10)+"张灰度图像");
@@ -239,7 +243,7 @@ void EMyThread::receivemessage()
         {
             if(showdata.size()==showdata[2]*showdata[3]*100/8+38)
             {
-                if((showdata[0]==255)&&(showdata[1]==37)&&(showdata[showdata[2]*showdata[3]*100/8+36]==37)&&(showdata[showdata[2]*showdata[3]*100/8+37]==255))
+                if(((uint8_t)showdata[0]==255)&&((uint8_t)showdata[1]==37)&&((uint8_t)showdata[showdata[2]*showdata[3]*100/8+36]==37)&&((uint8_t)showdata[showdata[2]*showdata[3]*100/8+37]==255))
                 {
                     image_count++;
                     Showbuf->append("接受第"+QString::number(image_count,10)+"张二值图像");
