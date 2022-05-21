@@ -28,7 +28,7 @@ epoint.cpp是图像输出的类。
 
 
 
-基于[原作者xufuq的ui][https://github.com/xufuq/ui]，切换到VS2019(编译要先安装qt_addin_vs的插件)，并根据需要做了部分修改
+基于[原作者xufuq的ui](https://github.com/xufuq/ui)，切换到VS2019(编译要先安装qt_addin_vs的插件)，并根据需要做了部分修改
 
 主要用到了chart的图表显示16个通道的数据
 
